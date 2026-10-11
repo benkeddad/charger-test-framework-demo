@@ -66,5 +66,7 @@ devices:
 
 # Map resource names to simulated devices
 resources:
-  ASRL1::INSTR:      # Serial port address (used in tests)
+  GPIB0::4::INSTR:   # GPIB address (used in Phase 2 tests)
+    device: psu      # This resource uses the 'psu' device above
+  ASRL1::INSTR:      # Serial port address (used in Phase 1 tests)
     device: psu      # This resource uses the 'psu' device above
