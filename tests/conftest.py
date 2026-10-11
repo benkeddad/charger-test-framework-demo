@@ -5,6 +5,7 @@ Central place for:
 - Async test setup via pytest-asyncio
 - Shared fixtures (e.g., power supply, central system, charger)
 - Test discovery settings
+- Requirements traceability setup
 """
 
 import asyncio  # Async runtime
@@ -17,9 +18,44 @@ import pytest  # pytest framework
 from chargerlab.charger.central_system import MockCentralSystem  # Mock OCPP backend
 from chargerlab.charger.simulator import SimulatedCharger  # Simulated charger
 from chargerlab.drivers.mock_psu import MockPowerSupply  # Mock power supply for testing
+from chargerlab.requirements.database import get_database  # Access requirements database
 
 # Logger for this module
 logger = logging.getLogger(__name__)
+
+# Flag to track if requirements have been initialized
+_requirements_initialized = False
+
+
+def _initialize_requirements_once():
+    """Initialize requirements database once on first pytest run.
+    
+    This prevents double-initialization when conftest is imported multiple times.
+    """
+    global _requirements_initialized  # Access global flag
+    
+    # If already initialized, skip (prevent double setup)
+    if _requirements_initialized:
+        return
+    
+    # Mark as initialized
+    _requirements_initialized = True
+    
+    # Import and execute setup (only on first run)
+    from chargerlab.requirements.test_requirements_setup import (
+        setup_requirements,
+        link_phase_1_tests,
+        link_phase_2_tests,
+    )
+    
+    # Initialize database and link tests
+    setup_requirements()  # Populate requirements database
+    link_phase_1_tests()  # Link Phase 1 tests to requirements
+    link_phase_2_tests()  # Link Phase 2 tests to requirements
+    
+    logger.info("Requirements database initialized")
+
+
 
 
 # ============================================================================
@@ -37,6 +73,9 @@ def pytest_configure(config):
     - boundary: Tests limits and extreme values
     - recovery: Tests error recovery and resilience
     """
+    # Initialize requirements database (one-time setup)
+    _initialize_requirements_once()
+    
     # Set PYVISA_SIM_PATH before any tests import pyvisa
     # This tells pyvisa-sim to load our custom device config from YAML
     sim_path = os.path.join(
