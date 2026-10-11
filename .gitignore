@@ -1,0 +1,31 @@
+# Virtual environment directories
+.venv/
+venv/
+env/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Test and evidence output
+evidence/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Generated files
+*.log
+.coverage
+htmlcov/

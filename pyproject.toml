@@ -1,0 +1,81 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "chargerlab"
+version = "0.1.0"
+description = "Portfolio test framework for EV charger control, equipment, and cloud-integration testing"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Portfolio Author", email = "dev@example.com"}
+]
+keywords = ["testing", "ev-charger", "ocpp", "pyvisa", "test-framework"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+
+dependencies = [
+    "ocpp==2.1.0",
+    "websockets==17.2",
+    "pyvisa==1.16.2",
+    "pyvisa-sim==0.7.1",
+    "pytest==9.1.1",
+    "pytest-asyncio==1.4.0",
+    "pydantic==2.14.0",
+    "PyYAML==6.0.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.5.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.setuptools]
+# Use src layout: all Python source under src/
+packages = ["chargerlab"]
+package-dir = {"" = "src"}
+
+[tool.pytest.ini_options]
+# Enable asyncio support
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+# Look for tests here
+testpaths = ["tests"]
+# Custom markers for test organization
+markers = [
+    "smoke: fast tests run on every pull request",
+    "requirement(id): links a test to a requirement ID from configs/requirements.yaml",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "UP",     # pyupgrade
+    "B",      # flake8-bugbear
+    "C90",    # mccabe complexity
+]
+
+[tool.ruff.lint]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+    "W605",   # invalid escape sequence
+]
+
+[tool.ruff.per-file-ignores]
+# Tests can have longer lines
+"tests/**" = ["E501"]
+
