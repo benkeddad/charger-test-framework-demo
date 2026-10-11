@@ -1,0 +1,70 @@
+# pyvisa-sim device configuration for simulated power supply
+# This defines a virtual instrument that responds to SCPI commands
+# Used in tests to avoid dependency on real hardware
+
+spec: 1.0  # Spec version (required by pyvisa-sim)
+
+devices:
+  psu:
+    # Define the simulated PSU responses for various VISA interfaces
+    eom:
+      GPIB INSTR:
+        q: "\n"  # Query termination: newline
+        r: "\n"  # Response termination: newline
+      ASRL INSTR:
+        q: "\n"
+        r: "\n"
+      USB INSTR:
+        q: "\n"
+        r: "\n"
+      TCPIP INSTR:
+        q: "\n"
+        r: "\n"
+    
+    # Error handling: respond with ERROR for invalid commands
+    error:
+      response:
+        command_error: "ERROR"
+    
+    # Dialogue sequences: define responses to specific SCPI commands
+    dialogues:
+      # Identification query (always return this string)
+      - q: "*IDN?"
+        r: "SIM,PSU-1000,SN0001,1.0"  # Simulator, Model, Serial, Version
+      
+      # Reset command (no response needed, just acknowledge)
+      - q: "*RST"
+    
+    # Properties: define settable and gettable SCPI parameters
+    properties:
+      # Voltage property (0-1000 V)
+      voltage:
+        default: 0.0  # Initial voltage is 0 V
+        getter:
+          q: "VOLT?"      # Query command for voltage
+          r: "{:.3f}"     # Response format: float with 3 decimals
+        setter:
+          q: "VOLT {:.3f}"  # Set command: VOLT <value>
+          # NOTE: No response (r:) on setter! Prevents stale response in next query
+        specs:
+          min: 0      # Minimum allowed voltage
+          max: 1000   # Maximum allowed voltage
+          type: float # Type validation
+      
+      # Output property (0 or 1)
+      output:
+        default: 0    # Initial state: output OFF
+        getter:
+          q: "OUTP?"  # Query command for output state
+          r: "{:d}"   # Response format: integer
+        setter:
+          q: "OUTP {:d}"  # Set command: OUTP <0 or 1>
+          # NOTE: No response (r:) on setter!
+        specs:
+          valid: [0, 1]   # Only 0 (off) or 1 (on) allowed
+          type: int       # Type validation
+
+# Map resource names to simulated devices
+resources:
+  ASRL1::INSTR:      # Serial port address (used in tests)
+    device: psu      # This resource uses the 'psu' device above

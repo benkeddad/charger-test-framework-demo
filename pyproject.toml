@@ -23,14 +23,14 @@ classifiers = [
 ]
 
 dependencies = [
-    "ocpp==2.1.0",
-    "websockets==17.2",
-    "pyvisa==1.16.2",
-    "pyvisa-sim==0.7.1",
-    "pytest==9.1.1",
-    "pytest-asyncio==1.4.0",
-    "pydantic==2.14.0",
-    "PyYAML==6.0.3",
+    "ocpp>=2.0.0",
+    "websockets>=17.0",
+    "pyvisa>=1.16.0",
+    "pyvisa-sim>=0.7.0",
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.4.0",
+    "pydantic>=2.14.0",
+    "PyYAML>=6.0.0",
 ]
 
 [project.optional-dependencies]
