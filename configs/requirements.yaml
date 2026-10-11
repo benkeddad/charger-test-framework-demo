@@ -1,0 +1,112 @@
+# EV Charger Test Framework Requirements
+# These are the core requirements that guide test development and evidence collection.
+# Priority levels: must (mandatory), should (highly recommended), could (nice-to-have)
+
+requirements:
+  - id: "CHARGER-001"
+    text: "Simulated charger must accept valid OCPP connections from central system"
+    priority: "must"
+    category: "functional"
+    rationale: "Core protocol conformance; without this, no testing is possible"
+
+  - id: "CHARGER-002"
+    text: "Simulated charger must reject malformed OCPP messages"
+    priority: "must"
+    category: "robustness"
+    rationale: "Prevents test framework state corruption from invalid protocol messages"
+
+  - id: "CHARGER-003"
+    text: "Charger must handle power supply state changes without crashing"
+    priority: "must"
+    category: "reliability"
+    rationale: "Power supply transitions are common in real charging scenarios"
+
+  - id: "CHARGER-004"
+    text: "Charger must enforce IEC 61851 state machine transitions correctly"
+    priority: "must"
+    category: "functional"
+    rationale: "Safety critical: incorrect state transitions could damage equipment"
+
+  - id: "CHARGER-005"
+    text: "Charger must detect and report overcurrent conditions"
+    priority: "must"
+    category: "safety"
+    rationale: "Protects equipment and vehicles from electrical faults"
+
+  - id: "CHARGER-006"
+    text: "Test evidence must be collected automatically for all test runs"
+    priority: "must"
+    category: "operational"
+    rationale: "Enables trace reports and flake detection for quality gates"
+
+  - id: "CHARGER-007"
+    text: "Tests should be able to mark themselves as covering specific requirements"
+    priority: "should"
+    category: "operational"
+    rationale: "Enables traceability matrix and coverage analysis"
+
+  - id: "CHARGER-008"
+    text: "Charger should support authentication token refresh"
+    priority: "should"
+    category: "functional"
+    rationale: "Simulates real-world session management"
+
+  - id: "CHARGER-009"
+    text: "Power supply simulator should support dynamic current limits"
+    priority: "should"
+    category: "functional"
+    rationale: "Tests charger behavior under varying power constraints"
+
+  - id: "CHARGER-010"
+    text: "Test framework could support multiple simultaneous charger instances"
+    priority: "could"
+    category: "scalability"
+    rationale: "Future enhancement for stress testing"
+
+  - id: "INFRA-001"
+    text: "All tests must be deterministic and repeatable"
+    priority: "must"
+    category: "operational"
+    rationale: "Required for flake detection and release gates"
+
+  - id: "INFRA-002"
+    text: "Test failures must be classified as infrastructure, product, or test issue"
+    priority: "must"
+    category: "operational"
+    rationale: "Enables root cause analysis and proper remediation"
+
+  - id: "INFRA-003"
+    text: "CI/CD pipeline must run full test suite nightly and on PRs"
+    priority: "must"
+    category: "operational"
+    rationale: "Detects regressions before code merge"
+
+  - id: "INFRA-004"
+    text: "Test suite must complete in under 5 minutes for PR feedback"
+    priority: "should"
+    category: "operational"
+    rationale: "Maintains developer productivity for rapid iteration"
+
+  - id: "MOCK-001"
+    text: "MockCentralSystem must respond to charger authorization requests"
+    priority: "must"
+    category: "functional"
+    rationale: "Required for successful charging session simulation"
+
+  - id: "MOCK-002"
+    text: "MockCentralSystem must track transaction state correctly"
+    priority: "must"
+    category: "functional"
+    rationale: "Enables validation of charger transaction handling"
+
+  - id: "MOCK-003"
+    text: "MockPowerSupply must simulate voltage and current parameters"
+    priority: "must"
+    category: "functional"
+    rationale: "Allows charger to validate electrical parameters"
+
+  - id: "MOCK-004"
+    text: "MockPowerSupply must support fault injection (overcurrent, overvoltage)"
+    priority: "should"
+    category: "functional"
+    rationale: "Tests error handling and safety shutdown"
