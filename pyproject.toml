@@ -52,7 +52,7 @@ asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
 # Load requirements traceability plugin
 python_files = ["test_*.py", "conftest.py"]
-python_classes = ["Test*"]
+python_classes = ["Test*"]  # Only collect classes starting with "Test"
 python_functions = ["test_*"]
 # Custom markers for test organization
 markers = [
@@ -63,8 +63,7 @@ markers = [
     "functional: tests validating core functionality",
     "performance: tests validating performance requirements",
 ]
-# Requirements plugin configuration
-addopts = "-p chargerlab.requirements.pytest_plugin"
+addopts = "-p chargerlab.requirements.pytest_plugin -p chargerlab.evidence.plugin"
 
 [tool.ruff]
 line-length = 100
