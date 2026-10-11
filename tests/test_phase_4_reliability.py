@@ -12,11 +12,14 @@ from pathlib import Path
 import pytest
 
 from chargerlab.evidence.models import EnvironmentInfo, FailureClass, TestResult
+from chargerlab.requirements.pytest_plugin import requires
 
 
 class TestEvidenceModels:
     """Tests for evidence data models."""
 
+    @requires("CHARGER-006", "INFRA-002", "INFRA-001")
+    @pytest.mark.smoke
     def test_result_record_basic(self) -> None:
         """Test result record with basic fields."""
         result = TestResult(
@@ -34,6 +37,7 @@ class TestEvidenceModels:
         assert data["requirement_ids"] == ["REQ-001"]
         assert data["failure_class"] == "pass"
 
+    @requires("CHARGER-006", "INFRA-002", "INFRA-001")
     def test_result_record_failure_classification(self) -> None:
         """Test result captures failure class: infra, product, test."""
         # Product failure
@@ -66,6 +70,7 @@ class TestEvidenceModels:
         )
         assert result_test.failure_class == FailureClass.TEST
 
+    @requires("CHARGER-006", "INFRA-001")
     def test_environment_info_model(self) -> None:
         """Environment info captures system state for reproducibility."""
         env = EnvironmentInfo(
@@ -83,6 +88,8 @@ class TestEvidenceModels:
         assert data["simulated"] is True
         assert data["library_versions"]["ocpp"] == "2.1.0"
 
+    @requires("CHARGER-006", "INFRA-001")
+    @pytest.mark.smoke
     def test_evidence_serialization_to_json(self) -> None:
         """Evidence can be serialized to JSON and back."""
         original = TestResult(
@@ -113,6 +120,7 @@ class TestEvidenceModels:
 class TestEvidenceCollection:
     """Tests for evidence collection during test execution."""
 
+    @requires("CHARGER-006", "INFRA-001")
     def test_evidence_plugin_captures_test_runs(self) -> None:
         """Evidence plugin captures test outcomes after pytest runs."""
         # The Phase 3 tests should have generated evidence
@@ -122,6 +130,7 @@ class TestEvidenceCollection:
             pytest.skip("Evidence directory not found (run with pytest for collection)")
         assert evidence_dir.exists()
 
+    @requires("CHARGER-006", "INFRA-001")
     def test_evidence_directory_structure(self) -> None:
         """Evidence is organized in evidence/<UTC-timestamp>/ directories."""
         evidence_dir = Path("evidence")
@@ -141,6 +150,7 @@ class TestEvidenceCollection:
         else:
             pytest.skip("No evidence directories with results.json")
 
+    @requires("CHARGER-006", "INFRA-002", "INFRA-001")
     def test_results_json_valid_format(self) -> None:
         """results.json contains properly formatted test result records."""
         evidence_dir = Path("evidence")
@@ -174,6 +184,7 @@ class TestEvidenceCollection:
 
         pytest.skip("No evidence found with valid results")
 
+    @requires("CHARGER-006", "INFRA-001")
     def test_environment_json_valid_format(self) -> None:
         """environment.json contains system and library info."""
         evidence_dir = Path("evidence")
@@ -206,12 +217,15 @@ class TestEvidenceCollection:
 class TestFlakeDetection:
     """Tests for flake detection via multiple test runs."""
 
+    @requires("INFRA-001", "INFRA-002")
+    @pytest.mark.smoke
     def test_flake_checker_script_exists(self) -> None:
         """flake_check.py tool exists and is executable."""
         flake_check = Path("tools/flake_check.py")
         assert flake_check.exists()
         assert flake_check.is_file()
 
+    @requires("INFRA-001", "INFRA-002")
     def test_flake_checker_requires_run_count(self) -> None:
         """flake_check.py requires a run count argument."""
         import subprocess
@@ -224,6 +238,7 @@ class TestFlakeDetection:
         )
         assert result.returncode != 0
 
+    @requires("INFRA-001", "INFRA-002")
     def test_flake_checker_rejects_zero_runs(self) -> None:
         """flake_check.py rejects run count of zero."""
         import subprocess
@@ -237,6 +252,7 @@ class TestFlakeDetection:
         assert result.returncode == 2  # Error exit code for validation failure
         assert "must be >= 1" in result.stderr
 
+    @requires("INFRA-001", "INFRA-002")
     def test_flake_checker_accepts_positive_count(self) -> None:
         """flake_check.py accepts positive run count."""
         import subprocess
@@ -255,6 +271,8 @@ class TestFlakeDetection:
 class TestFailureClassification:
     """Tests for distinguishing failure types."""
 
+    @requires("INFRA-002", "INFRA-001")
+    @pytest.mark.smoke
     def test_failure_class_passed_test(self) -> None:
         """Passed tests classified as PASS."""
         result = TestResult(
@@ -265,6 +283,7 @@ class TestFailureClassification:
         )
         assert result.failure_class == FailureClass.PASS
 
+    @requires("INFRA-002", "INFRA-001")
     def test_failure_class_infrastructure_error(self) -> None:
         """Infrastructure errors (timeout, connection) classified as INFRA."""
         result = TestResult(
@@ -276,6 +295,7 @@ class TestFailureClassification:
         )
         assert result.failure_class == FailureClass.INFRA
 
+    @requires("INFRA-002", "INFRA-001")
     def test_failure_class_product_defect(self) -> None:
         """Assertion failures classified as PRODUCT (the thing being tested is broken)."""
         result = TestResult(
@@ -287,6 +307,7 @@ class TestFailureClassification:
         )
         assert result.failure_class == FailureClass.PRODUCT
 
+    @requires("INFRA-002", "INFRA-001")
     def test_failure_class_framework_bug(self) -> None:
         """Framework/test bugs classified as TEST."""
         result = TestResult(
@@ -298,6 +319,7 @@ class TestFailureClassification:
         )
         assert result.failure_class == FailureClass.TEST
 
+    @requires("INFRA-002", "INFRA-001")
     def test_failure_class_skipped_test(self) -> None:
         """Skipped tests classified as SKIP."""
         result = TestResult(

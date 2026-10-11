@@ -29,6 +29,8 @@ from chargerlab.requirements.pytest_plugin import requires  # Test decorator
 
 
 @pytest.mark.integration
+@pytest.mark.smoke
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_add():
     """Test that requirements can be added to database.
 
@@ -61,6 +63,8 @@ def test_requirements_database_add():
 
 
 @pytest.mark.integration
+@pytest.mark.smoke
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_duplicate_id_rejected():
     """Test that duplicate requirement IDs are rejected.
 
@@ -97,6 +101,8 @@ def test_requirements_database_duplicate_id_rejected():
 
 
 @pytest.mark.integration
+@pytest.mark.smoke
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_link_test():
     """Test that tests can be linked to requirements.
 
@@ -134,6 +140,7 @@ def test_requirements_database_link_test():
 
 
 @pytest.mark.integration
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_link_nonexistent_requirement():
     """Test that linking to nonexistent requirement fails.
 
@@ -156,6 +163,7 @@ def test_requirements_database_link_nonexistent_requirement():
 
 
 @pytest.mark.integration
+@requires("CHARGER-006", "INFRA-002", "INFRA-001")
 def test_requirements_database_record_evidence():
     """Test that evidence (test results) can be recorded.
 
@@ -194,6 +202,8 @@ def test_requirements_database_record_evidence():
 
 
 @pytest.mark.integration
+@pytest.mark.smoke
+@requires("CHARGER-006", "INFRA-002", "INFRA-001")
 def test_requirements_database_status_passing():
     """Test that requirement status is PASSING when all tests pass.
 
@@ -229,6 +239,7 @@ def test_requirements_database_status_passing():
 
 
 @pytest.mark.integration
+@requires("CHARGER-006", "INFRA-002", "INFRA-001")
 def test_requirements_database_status_failing():
     """Test that requirement status is FAILING when tests fail.
 
@@ -263,6 +274,7 @@ def test_requirements_database_status_failing():
 
 
 @pytest.mark.integration
+@requires("CHARGER-006", "INFRA-002", "INFRA-001")
 def test_requirements_database_status_partial():
     """Test that requirement status is PARTIAL with mix of pass/fail.
 
@@ -298,6 +310,7 @@ def test_requirements_database_status_partial():
 
 
 @pytest.mark.integration
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_waive_requirement():
     """Test that requirements can be waived from compliance.
 
@@ -331,6 +344,8 @@ def test_requirements_database_waive_requirement():
 
 
 @pytest.mark.integration
+@pytest.mark.smoke
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_get_by_category():
     """Test that requirements can be filtered by category.
 
@@ -361,6 +376,8 @@ def test_requirements_database_get_by_category():
 
 
 @pytest.mark.integration
+@pytest.mark.smoke
+@requires("CHARGER-007", "INFRA-001")
 def test_requirements_database_coverage_summary():
     """Test that coverage summary counts are correct.
 
@@ -398,6 +415,7 @@ def test_requirements_database_coverage_summary():
 
 
 @pytest.mark.integration
+@requires("CHARGER-007", "INFRA-001")
 def test_report_generator_text_report(tmp_path):
     """Test that text report can be generated.
 
@@ -439,6 +457,7 @@ def test_report_generator_text_report(tmp_path):
 
 
 @pytest.mark.integration
+@requires("CHARGER-007", "INFRA-001")
 def test_report_generator_csv_report(tmp_path):
     """Test that CSV report can be generated.
 
@@ -476,6 +495,7 @@ def test_report_generator_csv_report(tmp_path):
 
 
 @pytest.mark.integration
+@requires("CHARGER-007", "INFRA-001")
 def test_report_generator_html_report(tmp_path):
     """Test that HTML report can be generated.
 
